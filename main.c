@@ -20,7 +20,7 @@ int main(void)
    KeyPad_Init();
    
    //LCD_WriteChar('D');
-   LCD_WriteInteger(128);
+   LCD_WriteInteger(-128);
    while (1)
    {
 	   value = KeyPad_GetValue();
