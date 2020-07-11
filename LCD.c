@@ -133,14 +133,15 @@ void LCD_Clear(void)
 }
 
  void LCD_WriteInteger(sint32 number){
- uint8 arrSize=0;
- uint8* arr="";
+ //uint8 arrSize=0;
+ //uint8* arr=NULL;
+ sint32 temp=1;
  uint8 negative=number<0?1:0;
   if(negative){
 	  LCD_WriteChar(45);
 	  number*=-1;
   }
- while(number%10){
+ /*while(number%10){
  
  arr[arrSize]=((number%10) + 48);
  number/=10;
@@ -150,5 +151,14 @@ void LCD_Clear(void)
  while(arrSize>=0){
  LCD_WriteChar(arr[arrSize]);
  arrSize--;
+ }*/
+ while(number%10){
+	 
+	 temp=((number%10) + (temp*10));
+	 number/=10;
+ }
+ while(temp >1){
+ LCD_WriteChar((temp%10)+48);
+ temp/=10;
  }
  }

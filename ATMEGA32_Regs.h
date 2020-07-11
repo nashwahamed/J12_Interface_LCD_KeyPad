@@ -22,4 +22,19 @@
 #define PIND  (*(volatile uint8*)(0x30))
 #define DDRD  (*(volatile uint8*)(0x31))
 
+/**************Status Register(Interupt)***********************/
+#define SREG (*(volatile uint8*)(0x5F))
+#define GICR (*(volatile uint8*)(0x5B))
+#define GIFR (*(volatile uint8*)(0x5A))
+#define MCUCR (*(volatile uint8*)(0x55))
+#define MCUCSR (*(volatile uint8*)(0x54))
+
+/*****************ADC**************/
+#define ADMUX		(*(volatile uint8*)(0x27))
+#define ADCSRA		(*(volatile uint8*)(0x26))
+#define ADCH		(*(volatile uint8*)(0x25))
+#define ADCL		(*(volatile uint8*)(0x24))
+#define ADC_Adjust (*(volatile uint16*)(0x24))
+#define SFIOR		(*(volatile uint8*)(0x50))
+
 #endif /* ATMEGA32_REG_H_ */

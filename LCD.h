@@ -13,6 +13,8 @@
 #include "BIT_Math.h"
 #include "DIO.h"
 
+#define NULL ((void *)0)
+
 
 
 void LCD_Init(void);

@@ -120,6 +120,15 @@
     </ToolchainSettings>
   </PropertyGroup>
   <ItemGroup>
+    <Compile Include="ADC.c">
+      <SubType>compile</SubType>
+    </Compile>
+    <Compile Include="ADC.h">
+      <SubType>compile</SubType>
+    </Compile>
+    <Compile Include="ADC_Cfg.h">
+      <SubType>compile</SubType>
+    </Compile>
     <Compile Include="ATMEGA32_Regs.h">
       <SubType>compile</SubType>
     </Compile>
@@ -154,6 +163,12 @@
       <SubType>compile</SubType>
     </Compile>
     <Compile Include="STD.h">
+      <SubType>compile</SubType>
+    </Compile>
+    <Compile Include="Temp_Sensor.c">
+      <SubType>compile</SubType>
+    </Compile>
+    <Compile Include="Temp_Sensor.h">
       <SubType>compile</SubType>
     </Compile>
   </ItemGroup>

@@ -25,14 +25,14 @@
 								    {'1','2','3','-'},
 								    {'c','0','=','+'} };*/
 
- const uint8 KeyPad_Vlues[4][4]={{'1','2','3','A'},
+/* const uint8 KeyPad_Vlues[4][4]={{'1','2','3','A'},
 									 {'4','5','6','B'},
 									 {'7','8','9','C'},
-									 {'*','0','#','D'}};
-/*const uint8 KeyPad_Vlues[4][4]={{'1','4','7','*'},
+									 {'*','0','#','D'}};*/
+const uint8 KeyPad_Vlues[4][4]={{'1','4','7','*'},
 								{'2','5','8','0'},
 								{'3','6','9','#'},
-								{'A','B','C','D'}};*/
+								{'A','B','C','D'}};
 											  
 											  
 										  
@@ -75,6 +75,7 @@ uint8 KeyPad_GetValue(void)
 	{
 		
 		DIO_WritePin(KEYPAD_PORT ,LOC_Coloum , DIO_PIN_LOW);
+		//DIO_WritePin(KEYPAD_PORT ,LOC_Coloum , DIO_PIN_HIGH);
 		
 		for(LOC_ROW = ROW_INIT ; LOC_ROW <= ROW_FINAL ; LOC_ROW++)
 		{
@@ -82,10 +83,12 @@ uint8 KeyPad_GetValue(void)
 			DIO_ReadPin (KEYPAD_PORT ,LOC_ROW , &Temp);
 			
 			if(!Temp)
+			//if(Temp)
 			{
 				Value = KeyPad_Vlues[LOC_ROW - ROW_INIT][LOC_Coloum - COL_INIT];
 				
 				while(!Temp)
+				//while(Temp)
 				{
 					DIO_ReadPin (KEYPAD_PORT ,LOC_ROW , &Temp);
 				}
@@ -96,6 +99,7 @@ uint8 KeyPad_GetValue(void)
 		}
 		
 		DIO_WritePin(KEYPAD_PORT ,LOC_Coloum , DIO_PIN_HIGH);
+		//DIO_WritePin(KEYPAD_PORT ,LOC_Coloum , DIO_PIN_LOW);
 	}
 	
 	return Value ;
