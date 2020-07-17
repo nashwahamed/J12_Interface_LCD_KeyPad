@@ -1,44 +1,211 @@
 /*
- * ADC.c
+ * ADC.C
  *
- * Created: 7/11/2020 12:33:07 PM
- *  Author: nashwa.hamed
- */ 
- #include "ADC.h"
- void ADC_Init(void){
-	 #if ADC_VOLTAGE_REFERENCE == ADC_VREF_AVCC
-	 SET_BIT(ADMUX,6);
-	 CLR_BIT(ADMUX,7);
+ *  Created on: Jul 17, 2020
+ *      Author: nashwa.hamed
+ */
 
-	 #endif 
-	 #if ADC_CHANNEL	==ADC_CHANNEL_1
-	 SET_BIT(ADMUX,0);
-	 #endif
-	 #if ADC_ADJUSCENT==ADC_RIGHT_ADJUST
-	 CLR_BIT(ADMUX,5);
-	 #endif
-	 #if ADC_CONVERSION==ADC_AUTO_TRIGGER
-	 SET_BIT(ADCSRA,5);
-	 #endif
-	 #if ADC_PRESCALER==ADC_PRESC_128
-	 SET_BIT(ADCSRA,0);
-	 SET_BIT(ADCSRA,1);
-	 SET_BIT(ADCSRA,2);
+#include "ADC.h"
+#include "Bit_Math.h"
 
-	 #endif 
-	  #if ADC_INTERRUPT_STATUS==ADC_INTERRUPT_DISABLE
-	  CLR_BIT(ADCSRA,3);
-	  #endif
-	  //enable ADC
-SET_BIT(ADCSRA,7);
- }
+void ADC_Init(void){
 
- void ADC_Read(uint16* val){
- uint16 digital_value=0;
- SET_BIT(ADCSRA,6); //start conversion
- #if ADC_INTERRUPT_STATUS==ADC_INTERRUPT_DISABLE
-  while(!(GET_BIT(ADCSRA,4)));
-  digital_value=ADC_Adjust;
-  *val=((digital_value *500)/1024); //temp 1 degree per 10mv
-   #endif
- }
+	//select voltage reference and ADC Channel
+	ADC_SelectVoltageRefernce();
+
+	//make PIN Input
+	ADC_EnablePIN();
+//specify adustment
+#if ADC_ADJUSTMENT==ADC_RightADJUST
+	//Right Justifier
+	CLR_BIT(ADMUX,5);
+#elif ADC_ADJUSTMENT==ADC_LEFTADJUST
+	SET_BIT(ADMUX,5);
+#endif
+
+	//set conversion speed
+	ADC_SetConversion();
+#if ADC_CONVERSION_TRIGGER == ADC_AUTO_TRIGGER
+	//initialize interrupt bite
+	SET_BIT(ADCSRA,ADC_CONVERSION_TRIGGER);
+#endif
+
+#if ADC_INTERRUPT_STATUS==ADC_INTERRUPT_DISABLE
+	CLR_BIT(ADMUX,3);
+#elif ADC_INTERRUPT_STATUS==ADC_INTERRUPT_ENABLE
+	SET_BIT(ADMUX,3);
+#endif
+
+	//enable ADC
+	SET_BIT(ADCSRA,ADC_ENABLE);
+
+
+}
+
+void ADC_Read(uint16* data){
+	uint16 conv=0;
+	//activate the start conversion bit
+	ADC_StartConversion();
+	//wait for conversion to be complete by polling
+	while(!(GET_BIT(ADCSRA,ADC_INTERRUPT_FLAG)));
+	//read converted value
+#if ADC_ADJUSTMENT==ADC_RightADJUST
+	conv=ADC_Adjust;
+#elif ADC_ADJUSTMENT==ADC_LEFTADJUST
+	conv=(ADCH << 2)|(ADCL >>6);
+#endif
+
+switch(ADC_VREF){
+case ADC_VREF_VCC:
+
+#if ADC_Resolution == 8
+	*data = (conv*500)/256;
+#elif ADC_Resolution==10
+	*data = (conv*500)/1024;
+#endif
+	break;
+
+case ADC_VREF_INTERNAL:
+#if ADC_Resolution == 8
+	*data = (conv*250)/256;
+#elif ADC_Resolution==10
+	*data = (conv*250)/1024;
+#endif
+	break;
+default:
+	break;
+}
+
+}
+
+void ADC_StartConversion(void){
+	SET_BIT(ADCSRA,ADC_STARTCONVERSION);
+}
+
+void ADC_EnablePIN(){
+
+#if ADC_CHANNEL==ADC_0
+
+		CLR_BIT(ADMUX,ADC_MUX_0);
+		CLR_BIT(ADMUX,ADC_MUX_1);
+		CLR_BIT(ADMUX,ADC_MUX_2);
+		CLR_BIT(ADMUX,ADC_MUX_3);
+		CLR_BIT(ADMUX,ADC_MUX_4);
+
+#elif ADC_CHANNEL==ADC_1
+
+		SET_BIT(ADMUX,ADC_MUX_0);
+		CLR_BIT(ADMUX,ADC_MUX_1);
+		CLR_BIT(ADMUX,ADC_MUX_2);
+		CLR_BIT(ADMUX,ADC_MUX_3);
+		CLR_BIT(ADMUX,ADC_MUX_4);
+
+#elif ADC_CHANNEL==ADC_2
+		CLR_BIT(ADMUX,ADC_MUX_0);
+		SET_BIT(ADMUX,ADC_MUX_1);
+		CLR_BIT(ADMUX,ADC_MUX_2);
+		CLR_BIT(ADMUX,ADC_MUX_3);
+		CLR_BIT(ADMUX,ADC_MUX_4);
+#elif ADC_CHANNEL== ADC_3
+
+		SET_BIT(ADMUX,ADC_MUX_0);
+		SET_BIT(ADMUX,ADC_MUX_1);
+		CLR_BIT(ADMUX,ADC_MUX_2);
+		CLR_BIT(ADMUX,ADC_MUX_3);
+		CLR_BIT(ADMUX,ADC_MUX_4);
+
+#elif ADC_CHANNEL==ADC_4
+		CLR_BIT(ADMUX,ADC_MUX_0);
+		CLR_BIT(ADMUX,ADC_MUX_1);
+		SET_BIT(ADMUX,ADC_MUX_2);
+		CLR_BIT(ADMUX,ADC_MUX_3);
+		CLR_BIT(ADMUX,ADC_MUX_4);
+
+#elif ADC_CHANNEL== ADC_5
+
+		SET_BIT(ADMUX,ADC_MUX_0);
+		CLR_BIT(ADMUX,ADC_MUX_1);
+		SET_BIT(ADMUX,ADC_MUX_2);
+		CLR_BIT(ADMUX,ADC_MUX_3);
+		CLR_BIT(ADMUX,ADC_MUX_4);
+
+#elif ADC_CHANNEL== ADC_6
+
+		CLR_BIT(ADMUX,ADC_MUX_0);
+		SET_BIT(ADMUX,ADC_MUX_1);
+		SET_BIT(ADMUX,ADC_MUX_2);
+		CLR_BIT(ADMUX,ADC_MUX_3);
+		CLR_BIT(ADMUX,ADC_MUX_4);
+
+#elif ADC_CHANNEL== ADC_7
+
+		SET_BIT(ADMUX,ADC_MUX_0);
+		SET_BIT(ADMUX,ADC_MUX_1);
+		SET_BIT(ADMUX,ADC_MUX_2);
+		CLR_BIT(ADMUX,ADC_MUX_3);
+		CLR_BIT(ADMUX,ADC_MUX_4);
+#endif
+}
+
+void ADC_SetConversion(){
+#if ADC_PRESCALER== ADC_PRESCALER_2
+
+		SET_BIT(ADCSRA,0);
+		CLR_BIT(ADCSRA,1);
+		CLR_BIT(ADCSRA,2);
+
+#elif ADC_PRESCALER== ADC_PRESCALER_4
+
+		CLR_BIT(ADCSRA,0);
+		SET_BIT(ADCSRA,1);
+		CLR_BIT(ADCSRA,2);
+
+#elif ADC_PRESCALER== ADC_PRESCALER_8
+
+		SET_BIT(ADCSRA,0);
+		SET_BIT(ADCSRA,1);
+		CLR_BIT(ADCSRA,2);
+
+#elif ADC_PRESCALER== ADC_PRESCALER_16
+
+		CLR_BIT(ADCSRA,0);
+		CLR_BIT(ADCSRA,1);
+		SET_BIT(ADCSRA,2);
+
+#elif ADC_PRESCALER== ADC_PRESCALER_32
+
+		SET_BIT(ADCSRA,0);
+		CLR_BIT(ADCSRA,1);
+		SET_BIT(ADCSRA,2);
+
+#elif ADC_PRESCALER== ADC_PRESCALER_64
+
+		CLR_BIT(ADCSRA,0);
+		SET_BIT(ADCSRA,1);
+		SET_BIT(ADCSRA,2);
+
+#elif ADC_PRESCALER== ADC_PRESCALER_128
+		SET_BIT(ADCSRA,0);
+		SET_BIT(ADCSRA,1);
+		SET_BIT(ADCSRA,2);
+#endif
+}
+
+void ADC_SelectVoltageRefernce(void){
+
+#if ADC_VREF== ADC_VREF_AREF
+
+		CLR_BIT(ADMUX,6);
+		CLR_BIT(ADMUX,7);
+
+#elif ADC_VREF== ADC_VREF_VCC
+		SET_BIT(ADMUX,6);
+		CLR_BIT(ADMUX,7);
+
+#elif ADC_VREF== ADC_VREF_INTERNAL
+
+		SET_BIT(ADMUX,6);
+		SET_BIT(ADMUX,7);
+#endif
+}
+

@@ -41,8 +41,11 @@ C_SRCS +=  \
 ../DIO.c \
 ../KeyPad.c \
 ../LCD.c \
+../LED.c \
 ../main.c \
-../Temp_Sensor.c
+../Segment.c \
+../Temp_Sensor.c \
+../Timer.c
 
 
 PREPROCESSING_SRCS += 
@@ -56,32 +59,44 @@ ADC.o \
 DIO.o \
 KeyPad.o \
 LCD.o \
+LED.o \
 main.o \
-Temp_Sensor.o
+Segment.o \
+Temp_Sensor.o \
+Timer.o
 
 OBJS_AS_ARGS +=  \
 ADC.o \
 DIO.o \
 KeyPad.o \
 LCD.o \
+LED.o \
 main.o \
-Temp_Sensor.o
+Segment.o \
+Temp_Sensor.o \
+Timer.o
 
 C_DEPS +=  \
 ADC.d \
 DIO.d \
 KeyPad.d \
 LCD.d \
+LED.d \
 main.d \
-Temp_Sensor.d
+Segment.d \
+Temp_Sensor.d \
+Timer.d
 
 C_DEPS_AS_ARGS +=  \
 ADC.d \
 DIO.d \
 KeyPad.d \
 LCD.d \
+LED.d \
 main.d \
-Temp_Sensor.d
+Segment.d \
+Temp_Sensor.d \
+Timer.d
 
 OUTPUT_FILE_PATH +=LCD_KeyPad.elf
 
@@ -125,6 +140,13 @@ LINKER_SCRIPT_DEP+=
 	@echo Finished building: $<
 	
 
+./LED.o: .././LED.c
+	@echo Building file: $<
+	@echo Invoking: AVR/GNU C Compiler : 5.4.0
+	$(QUOTE)C:\Program Files (x86)\Atmel\Studio\7.0\toolchain\avr8\avr8-gnu-toolchain\bin\avr-gcc.exe$(QUOTE)  -x c -funsigned-char -funsigned-bitfields -DNDEBUG  -I"C:\Program Files (x86)\Atmel\Studio\7.0\Packs\atmel\ATmega_DFP\1.3.300\include"  -Os -ffunction-sections -fdata-sections -fpack-struct -fshort-enums -Wall -mmcu=atmega32 -B "C:\Program Files (x86)\Atmel\Studio\7.0\Packs\atmel\ATmega_DFP\1.3.300\gcc\dev\atmega32" -c -std=gnu99 -MD -MP -MF "$(@:%.o=%.d)" -MT"$(@:%.o=%.d)" -MT"$(@:%.o=%.o)"   -o "$@" "$<" 
+	@echo Finished building: $<
+	
+
 ./main.o: .././main.c
 	@echo Building file: $<
 	@echo Invoking: AVR/GNU C Compiler : 5.4.0
@@ -132,7 +154,21 @@ LINKER_SCRIPT_DEP+=
 	@echo Finished building: $<
 	
 
+./Segment.o: .././Segment.c
+	@echo Building file: $<
+	@echo Invoking: AVR/GNU C Compiler : 5.4.0
+	$(QUOTE)C:\Program Files (x86)\Atmel\Studio\7.0\toolchain\avr8\avr8-gnu-toolchain\bin\avr-gcc.exe$(QUOTE)  -x c -funsigned-char -funsigned-bitfields -DNDEBUG  -I"C:\Program Files (x86)\Atmel\Studio\7.0\Packs\atmel\ATmega_DFP\1.3.300\include"  -Os -ffunction-sections -fdata-sections -fpack-struct -fshort-enums -Wall -mmcu=atmega32 -B "C:\Program Files (x86)\Atmel\Studio\7.0\Packs\atmel\ATmega_DFP\1.3.300\gcc\dev\atmega32" -c -std=gnu99 -MD -MP -MF "$(@:%.o=%.d)" -MT"$(@:%.o=%.d)" -MT"$(@:%.o=%.o)"   -o "$@" "$<" 
+	@echo Finished building: $<
+	
+
 ./Temp_Sensor.o: .././Temp_Sensor.c
+	@echo Building file: $<
+	@echo Invoking: AVR/GNU C Compiler : 5.4.0
+	$(QUOTE)C:\Program Files (x86)\Atmel\Studio\7.0\toolchain\avr8\avr8-gnu-toolchain\bin\avr-gcc.exe$(QUOTE)  -x c -funsigned-char -funsigned-bitfields -DNDEBUG  -I"C:\Program Files (x86)\Atmel\Studio\7.0\Packs\atmel\ATmega_DFP\1.3.300\include"  -Os -ffunction-sections -fdata-sections -fpack-struct -fshort-enums -Wall -mmcu=atmega32 -B "C:\Program Files (x86)\Atmel\Studio\7.0\Packs\atmel\ATmega_DFP\1.3.300\gcc\dev\atmega32" -c -std=gnu99 -MD -MP -MF "$(@:%.o=%.d)" -MT"$(@:%.o=%.d)" -MT"$(@:%.o=%.o)"   -o "$@" "$<" 
+	@echo Finished building: $<
+	
+
+./Timer.o: .././Timer.c
 	@echo Building file: $<
 	@echo Invoking: AVR/GNU C Compiler : 5.4.0
 	$(QUOTE)C:\Program Files (x86)\Atmel\Studio\7.0\toolchain\avr8\avr8-gnu-toolchain\bin\avr-gcc.exe$(QUOTE)  -x c -funsigned-char -funsigned-bitfields -DNDEBUG  -I"C:\Program Files (x86)\Atmel\Studio\7.0\Packs\atmel\ATmega_DFP\1.3.300\include"  -Os -ffunction-sections -fdata-sections -fpack-struct -fshort-enums -Wall -mmcu=atmega32 -B "C:\Program Files (x86)\Atmel\Studio\7.0\Packs\atmel\ATmega_DFP\1.3.300\gcc\dev\atmega32" -c -std=gnu99 -MD -MP -MF "$(@:%.o=%.d)" -MT"$(@:%.o=%.d)" -MT"$(@:%.o=%.o)"   -o "$@" "$<" 

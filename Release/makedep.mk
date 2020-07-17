@@ -10,7 +10,13 @@ KeyPad.c
 
 LCD.c
 
+LED.c
+
 main.c
 
+Segment.c
+
 Temp_Sensor.c
+
+Timer.c
 

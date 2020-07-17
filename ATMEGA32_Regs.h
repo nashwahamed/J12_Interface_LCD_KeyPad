@@ -37,4 +37,12 @@
 #define ADC_Adjust (*(volatile uint16*)(0x24))
 #define SFIOR		(*(volatile uint8*)(0x50))
 
+/***************Timer****************/
+#define TCCR0		(*(volatile uint8*)(0x53))
+#define TCNT0		(*(volatile uint8*)(0x52))
+#define OCR0		(*(volatile uint8*)(0x5C))
+#define TIMSK		(*(volatile uint8*)(0x59))
+#define TIFR		(*(volatile uint8*)(0x58))
+
+
 #endif /* ATMEGA32_REG_H_ */

@@ -62,6 +62,8 @@ void DIO_ReadPin (uint8 Port ,uint8 Pin, uint8* Val);
 
 void DIO_SetPullUp(uint8 Port ,uint8 Pin );
 
+void DIO_TogglePin(uint8 port,uint8 pin);
+
 
 
 
