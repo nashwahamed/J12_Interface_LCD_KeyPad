@@ -15,7 +15,20 @@ void Timer_Init(void);
 void Timer_Start(void);
 void Timer_Stop(void);
 void Timer_Generate_Delay(uint8 delay_ms);
+void Timer0_SetCallBack(void (*p)(void));
 
 
+void Timer1_Init(void);
+void Timer1_Start(void);
+void Timer1_Stop(void);
+void Timer1_Generate_Delay(uint32 delay_ms);
+void Timer1_SetCallBack(void (*p)(void));
+
+void PWM0_Init();
+//will use current stable value for frequency as it needed a lot of calculation
+//normal parameter is frequency and Duty cycle
+//freq=16M/(64*256)=Fosclator/(prescaller)*256 =974KHZ
+void PWM0_Generate(uint16 DutyCycle);
+void PWM0_Start(void);
 
 #endif /* TIMER_H_ */

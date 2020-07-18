@@ -50,7 +50,7 @@ void LCD_Init(void)
 		LCD_WriteCommand(0x33);
 		LCD_WriteCommand(0x32);
 		LCD_WriteCommand(0x28);
-		LCD_WriteCommand(0x0C);
+		LCD_WriteCommand(0x0E);
         LCD_WriteCommand(0x01);
 		LCD_WriteCommand(0x06);
 		LCD_WriteCommand(0x02);

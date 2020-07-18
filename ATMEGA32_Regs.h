@@ -44,5 +44,10 @@
 #define TIMSK		(*(volatile uint8*)(0x59))
 #define TIFR		(*(volatile uint8*)(0x58))
 
+#define TCCR1A		(*(volatile uint8*)(0x4F))
+#define TCCR1B		(*(volatile uint8*)(0x4E))
+#define TCNT1L		(*(volatile uint16*)(0x4C))
+#define OCR1AL		(*(volatile uint16*)(0x4A))
+#define ICR1		(*(volatile uint8*)(0x46))
 
 #endif /* ATMEGA32_REG_H_ */
